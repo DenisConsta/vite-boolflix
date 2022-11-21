@@ -1,0 +1,16 @@
+
+@use './partials/variables' as *;
+
+html body{
+  min-height: 100vh;
+  background: #000000;
+  background: linear-gradient(180deg, #000000 0%, $color-primary 100%); 
+}
+
+main{
+  color: white;
+}
+
+.debug{
+  border: 1px solid blue;
+}
