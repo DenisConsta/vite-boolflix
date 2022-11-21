@@ -29,13 +29,16 @@ export default {
         }
       })
       .then((result) => {
-        store.resultList = result.data;
+        store.resultList = result.data.results;
         console.log(store.resultList);
       })
       .catch((error) =>{
         console.log(error);
       })
-    }
+    },
+   /*  getImage(url){
+      axios.get('https://image.tmdb.org/t/p/w300'+url).then((result))
+    } */
   }
 };
 </script>
