@@ -12,14 +12,11 @@ export default {
       return "https://image.tmdb.org/t/p/w500" + path;
     },
     getFlag(country) {
-      if(country === 'en' || country === 'uk')
-        return "fi-gb"
+      if (country === "en" || country === "uk") return "fi-gb";
       return "fi-" + country;
     },
   },
-  computed: {
-  
-  },
+  computed: {},
 };
 </script>
 
@@ -28,28 +25,23 @@ export default {
   <div class="flip-card col mb-3">
     <div class="flip-card-inner">
       <div class="flip-card-front">
-        
-        <img
-          :class="{'actor' : movie.media_type == 'person'}"
-          :src="getImageUrl(movie.profile_path)"
-          :alt="movie.title"
-          v-if="movie.profile_path != null && movie.media_type == 'person'"
-        />
         <img
           :src="getImageUrl(movie.poster_path)"
           :alt="movie.title"
-          v-else-if="movie.poster_path != null"
+          v-if="movie.poster_path != null"
         />
 
         <div v-else class="alternative">
-          <h3 v-if="movie.media_type == 'tv'">{{ movie.name }}</h3>
-          <h3 v-else-if="movie.media_type == 'person'">{{movie.name}}</h3>
-          <h3 v-else>{{ movie.title }}</h3>
-        </div>
+          <!-- <h3 v-if="movie.media_type == 'tv'">{{ movie.name }}</h3>
+          <h3 v-else-if="movie.media_type == 'movie'">{{movie.name}}</h3>
+          <h3 v-else>{{ movie.title }}</h3> -->
 
+          <h3 v-if="movie.name != null">{{ movie.name }}</h3>
+          <h3 v-else-if="movie.title">{{ movie.title }}</h3>
+        </div>
       </div>
       <div class="flip-card-back">
-        <div v-if="movie.media_type == 'person'" class="actor w-100 h-100 d-flex align-items-center justify-content-center">
+        <!--         <div v-if="movie.media_type == 'person'" class="actor w-100 h-100 d-flex align-items-center justify-content-center">
           <h3 class="text-center ">{{ movie.name }}</h3>
         </div>
         <h3 v-if="movie.media_type == 'tv'">Titolo: {{ movie.name }}</h3>
@@ -58,9 +50,19 @@ export default {
         <h3 v-if="movie.media_type == 'tv'">Titolo Originale: {{ movie.original_name }}</h3>
         <h3 v-else-if="movie.media_type != 'person'">Titolo Originale: {{ movie.original_title }}</h3>
         <h5><span class="fi" :class="getFlag(movie.original_language)"></span>{{ movie.original_language }}</h5>
-        <h6 v-if="movie.media_type != 'person'">Voto: {{ movie.vote_average }}</h6>
-<!--         <span class="fi fi-gr"></span>
- -->        
+        <h6 v-if="movie.media_type != 'person'">Voto: {{ movie.vote_average }}</h6> -->
+        <!--         <span class="fi fi-gr"></span>
+ -->
+        <!-- ? Title -->
+        <h3 v-if="movie.name != null">{{ movie.name }}</h3>
+        <h3 v-else-if="movie.title != null">{{ movie.title }}</h3>
+
+        <!-- ? Original title -->
+        <h4 v-if="movie.original_name != null">Original: {{ movie.original_name }}</h4>
+        <h4 v-else-if="movie.original_title != null">Original: {{ movie.original_title }}</h4>
+        <h5>Language: {{ movie.original_language }}</h5>
+        <h6>Voto: {{ movie.vote_average }}</h6>
+
       </div>
     </div>
   </div>
@@ -77,6 +79,12 @@ export default {
   cursor: pointer;
   perspective: 1000px;
   position: relative;
+  transition: transform .2s;
+
+  &:hover{
+    transform: scale(1.1);
+    z-index: 1000;
+  }
 
   img {
     width: 100%;
@@ -84,12 +92,7 @@ export default {
     object-fit: contain;
     overflow: hidden;
 
-    &.actor {
-      
-      &::after{
-      }
-    }
-
+ 
   }
 
   .alternative {
@@ -126,16 +129,26 @@ export default {
   backface-visibility: hidden;
 
   text-align: left;
-  h3,
+
+  h3{
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem;
+
+  }
+
+  h4,
   h5,
   h6 {
     font-size: 0.85rem;
     padding: 0.3rem 0.6rem;
   }
 
-  h5{
-    span{
-      margin-right: .3rem;
+
+
+  h5 {
+    span {
+      margin-right: 0.3rem;
     }
   }
 }

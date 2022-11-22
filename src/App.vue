@@ -3,8 +3,8 @@ import axios from "axios";
 import { store } from "./data/store";
 
 import AppHeader from "./components/AppHeader.vue";
-import AppSearch from "./components/AppSearch.vue";
 import CardsContainer from "./components/CardsContainer.vue";
+import AppSearch from "./components/AppSearch.vue";
 
 export default {
   name: "App",
@@ -12,6 +12,7 @@ export default {
     AppHeader,
     CardsContainer,
     AppSearch,
+    
   },
   data() {
     return {
@@ -19,61 +20,64 @@ export default {
     };
   },
   methods: {
-    getApi(url) {
-      //! rivedere
-      if (url == null || url == "" || store.titleSearch == "") {
-        url = store.popular;
-      } 
-      else {
-        store.currentUrl = url;
-        //store.info.current_page = 1;
-      }
-      console.log(store.info);
+    getApi(type) {
+      console.log('ciaooo');
+      if (store.titleSearch === null || store.titleSearch === "") {
+        if (type === null || type === "" || type === 'all'){
+          type = "movie";
+          store.tv = [];
+          store.movie = [];
+        }   
+        store.currentUrl = store.basic + type + "/popular?";
+      }else store.currentUrl = store.basic + 'search/' + type + '?';
 
+      console.log(store.currentUrl);
+
+      if (type === "all") {
+        store.type.forEach((el) => {
+          store.currentUrl = store.basic + 'search/' + el + '?';
+          console.log(el);
+          this.callApi(el.toString());
+        });
+      }
+      else this.callApi(type);
+      
+ 
+    },
+    callApi(type) {
       axios
-        .get(url, {
+        .get(store.currentUrl, {
           params: {
-            api_key : '1516e402ee3167eca46dc8b19a9b1dc8',
+            api_key: store.api_key,
             query: store.titleSearch,
-            page: store.info.current_page,
           },
         })
-        .then((result) => {
-          store.resultList = result.data.results;
-          store.info.current_page = result.data.page;
-          store.info.total_pages = result.data.total_pages;
-          store.info.total_results = result.data.total_results;
-
-          console.log(store.resultList);
-          console.log(store.info);
-
-      
+        .then((res) => {
+          store[type] = res.data.results;
         })
         .catch((error) => {
           console.log(error);
         });
+
+        console.log(store[type]);
     },
-    movePage(dir) {
-      if (dir) store.info.current_page++;
-      else store.info.current_page--;
-      this.getApi(store.currentUrl);
-      console.log(store.info.current_page);
-    },
-    /*  getImage(url){
-      axios.get('https://image.tmdb.org/t/p/w300'+url).then((result))
-    } */
   },
   mounted() {
-    this.getApi();
+    this.getApi(null);
   },
 };
 </script>
 
 <template>
-  <AppHeader />
+  <div class="container d-flex justify-content-between align-items-center">
+    <AppHeader  />
+    <!-- ? AppSearch -->
+    <AppSearch @startSearch="getApi('all')" />
+  </div>
+    
   <main>
-    <AppSearch @startSearch="getApi(store.apiUrl)" />
-    <CardsContainer @movePageEvent="movePage" />
+    <CardsContainer v-if="store.movie.length != 0" :type="store.movie" :titleSection="'Movies'"/>
+    <CardsContainer v-if="store.tv.length != 0" :type="store.tv" :titleSection="'TV Series'"/>
   </main>
 </template>
 
