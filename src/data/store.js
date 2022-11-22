@@ -13,6 +13,9 @@ export const store = reactive({
 
   titleSearch: '',
   
+  infoViewer: false,
+  lastMovie: {},
+
 
 
 });

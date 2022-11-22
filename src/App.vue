@@ -5,6 +5,7 @@ import { store } from "./data/store";
 import AppHeader from "./components/AppHeader.vue";
 import CardsContainer from "./components/CardsContainer.vue";
 import AppSearch from "./components/AppSearch.vue";
+import AppLightbox from "./components/AppLightbox.vue";
 
 export default {
   name: "App",
@@ -12,7 +13,8 @@ export default {
     AppHeader,
     CardsContainer,
     AppSearch,
-    
+    AppLightbox,
+
   },
   data() {
     return {
@@ -76,6 +78,9 @@ export default {
   </div>
     
   <main>
+
+    <AppLightbox :movie="store.lastMovie" v-if="store.infoViewer"/>
+
     <CardsContainer v-if="store.movie.length != 0" :type="store.movie" :titleSection="'Movies'"/>
     <CardsContainer v-if="store.tv.length != 0" :type="store.tv" :titleSection="'TV Series'"/>
   </main>
@@ -83,4 +88,8 @@ export default {
 
 <style lang="scss">
 @use "./styles/general.scss";
+
+.my-lightbox{
+
+}
 </style>

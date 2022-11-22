@@ -1,4 +1,7 @@
 <script>
+
+import { store } from '../data/store';
+
 export default {
   name: "AppCard",
   components: {},
@@ -6,7 +9,10 @@ export default {
     movie: Object,
   },
   data() {
-    return {};
+    return {
+      store,
+
+    };
   },
   methods: {
     getImageUrl(path) {
@@ -23,8 +29,12 @@ export default {
       for(let i=0; i<n; i++) num.push('x');
   
       return num;
-
     },
+    viewMovie(movie){
+      store.infoViewer = !store.infoViewer;
+      store.lastMovie = movie;
+      console.log(store.lastMovie);
+    }
   },
   computed: {},
 };
@@ -53,10 +63,10 @@ export default {
 
         <!-- ? Original title -->
         <h4 v-if="movie.original_name != null">
-          Original: {{ movie.original_name }}
+          <strong>Original:</strong> {{ movie.original_name }}
         </h4>
         <h4 v-else-if="movie.original_title != null">
-          Original: {{ movie.original_title }}
+          <strong>Original:</strong> {{ movie.original_title }}
         </h4>
 
         <!-- ? flag -->
@@ -67,10 +77,12 @@ export default {
         </h5>
 
         <!-- <h6>Voto: {{ movie.vote_average }}</h6> -->
-        <div class="stars">
+        <div class="stars pb-4">
           <i v-for="(x, index) in getStars(movie.vote_average)" :key="index" class="fa-solid fa-star"></i>
-
         </div>
+
+        <a @click="viewMovie(movie)" class="mx-1 my-btn">More info</a>
+        
       </div>
     </div>
   </div>
@@ -95,8 +107,8 @@ export default {
   }
 
   &:hover {
-    transform: scale(1.1);
-    z-index: 1000;
+    transform: scale(1.05);
+    z-index: 10;
   }
 
   img {
@@ -141,6 +153,7 @@ export default {
 
   text-align: left;
 
+  
   h3 {
     font-weight: 600;
     font-size: 1rem;
@@ -156,9 +169,11 @@ export default {
   .stars,
   h4,
   h5,
-  h6 {
+  h6,
+  p {
     font-size: 0.85rem;
     padding: 0.3rem 0.6rem;
+
   }
 
   h5 {
