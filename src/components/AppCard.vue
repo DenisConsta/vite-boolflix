@@ -17,6 +17,14 @@ export default {
       else if (country === "ko") return "fi-kr";
       return "fi-" + country;
     },
+    getStars(number) {
+      let n = 1, num = [];
+      if (number > 2) n = Math.floor(number / 2);
+      for(let i=0; i<n; i++) num.push('x');
+  
+      return num;
+
+    },
   },
   computed: {},
 };
@@ -50,7 +58,7 @@ export default {
         <h4 v-else-if="movie.original_title != null">
           Original: {{ movie.original_title }}
         </h4>
-        
+
         <!-- ? flag -->
         <h5 class="">
           <span class="fi" :class="getFlag(movie.original_language)"></span> ({{
@@ -58,7 +66,11 @@ export default {
           }})
         </h5>
 
-        <h6>Voto: {{ movie.vote_average }}</h6>
+        <!-- <h6>Voto: {{ movie.vote_average }}</h6> -->
+        <div class="stars">
+          <i v-for="(x, index) in getStars(movie.vote_average)" :key="index" class="fa-solid fa-star"></i>
+
+        </div>
       </div>
     </div>
   </div>
@@ -135,6 +147,13 @@ export default {
     padding: 0.3rem 0.6rem;
   }
 
+  .stars{
+    color: rgb(255, 230, 0);
+    display: flex;
+    gap: .2rem;
+  }
+
+  .stars,
   h4,
   h5,
   h6 {
