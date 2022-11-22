@@ -11,27 +11,56 @@ export default {
     getImageUrl(path) {
       return "https://image.tmdb.org/t/p/w500" + path;
     },
+    getFlag(country) {
+      if(country === 'en' || country === 'uk')
+        return "fi-gb"
+      return "fi-" + country;
+    },
   },
+  computed: {
   
+  },
 };
 </script>
 
 
 <template>
-
-  <div class="flip-card col mb-3 ">
+  <div class="flip-card col mb-3">
     <div class="flip-card-inner">
       <div class="flip-card-front">
-        <img :src="getImageUrl(movie.poster_path)" :alt="movie.title" v-if="movie.poster_path != null"/>
+        
+        <img
+          :class="{'actor' : movie.media_type == 'person'}"
+          :src="getImageUrl(movie.profile_path)"
+          :alt="movie.title"
+          v-if="movie.profile_path != null && movie.media_type == 'person'"
+        />
+        <img
+          :src="getImageUrl(movie.poster_path)"
+          :alt="movie.title"
+          v-else-if="movie.poster_path != null"
+        />
+
         <div v-else class="alternative">
-          <h3>{{ movie.original_title }}</h3>
+          <h3 v-if="movie.media_type == 'tv'">{{ movie.name }}</h3>
+          <h3 v-else-if="movie.media_type == 'person'">{{movie.name}}</h3>
+          <h3 v-else>{{ movie.title }}</h3>
         </div>
+
       </div>
       <div class="flip-card-back">
-        <h3>Titolo: {{ movie.title }}</h3>
-        <h3>Titolo Originale: {{ movie.original_title }}</h3>
-        <h5>Lingua: {{ movie.original_language }}</h5>
-        <h6>Voto: {{ movie.vote_average }}</h6>
+        <div v-if="movie.media_type == 'person'" class="actor w-100 h-100 d-flex align-items-center justify-content-center">
+          <h3 class="text-center ">{{ movie.name }}</h3>
+        </div>
+        <h3 v-if="movie.media_type == 'tv'">Titolo: {{ movie.name }}</h3>
+        <h3 v-else-if="movie.media_type != 'person'">Titolo: {{ movie.title }}</h3>
+
+        <h3 v-if="movie.media_type == 'tv'">Titolo Originale: {{ movie.original_name }}</h3>
+        <h3 v-else-if="movie.media_type != 'person'">Titolo Originale: {{ movie.original_title }}</h3>
+        <h5><span class="fi" :class="getFlag(movie.original_language)"></span>{{ movie.original_language }}</h5>
+        <h6 v-if="movie.media_type != 'person'">Voto: {{ movie.vote_average }}</h6>
+<!--         <span class="fi fi-gr"></span>
+ -->        
       </div>
     </div>
   </div>
@@ -46,16 +75,24 @@ export default {
   background-color: transparent;
   min-height: 300px;
   cursor: pointer;
-  perspective: 1000px; 
+  perspective: 1000px;
+  position: relative;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     overflow: hidden;
+
+    &.actor {
+      
+      &::after{
+      }
+    }
+
   }
 
-  .alternative{
+  .alternative {
     width: 100%;
     height: 100%;
     background-color: #2c2c2c;
@@ -85,15 +122,21 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; 
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  
+
   text-align: left;
   h3,
   h5,
-  h6{
-    font-size: .85rem;
-    padding: .3rem .6rem;
+  h6 {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  h5{
+    span{
+      margin-right: .3rem;
+    }
   }
 }
 
