@@ -1,6 +1,7 @@
 <script>
 export default {
   name: "AppCard",
+  components: {},
   props: {
     movie: Object,
   },
@@ -13,6 +14,7 @@ export default {
     },
     getFlag(country) {
       if (country === "en" || country === "uk") return "fi-gb";
+      else if (country === "ko") return "fi-kr";
       return "fi-" + country;
     },
   },
@@ -32,37 +34,31 @@ export default {
         />
 
         <div v-else class="alternative">
-          <!-- <h3 v-if="movie.media_type == 'tv'">{{ movie.name }}</h3>
-          <h3 v-else-if="movie.media_type == 'movie'">{{movie.name}}</h3>
-          <h3 v-else>{{ movie.title }}</h3> -->
-
           <h3 v-if="movie.name != null">{{ movie.name }}</h3>
           <h3 v-else-if="movie.title">{{ movie.title }}</h3>
         </div>
       </div>
       <div class="flip-card-back">
-        <!--         <div v-if="movie.media_type == 'person'" class="actor w-100 h-100 d-flex align-items-center justify-content-center">
-          <h3 class="text-center ">{{ movie.name }}</h3>
-        </div>
-        <h3 v-if="movie.media_type == 'tv'">Titolo: {{ movie.name }}</h3>
-        <h3 v-else-if="movie.media_type != 'person'">Titolo: {{ movie.title }}</h3>
-
-        <h3 v-if="movie.media_type == 'tv'">Titolo Originale: {{ movie.original_name }}</h3>
-        <h3 v-else-if="movie.media_type != 'person'">Titolo Originale: {{ movie.original_title }}</h3>
-        <h5><span class="fi" :class="getFlag(movie.original_language)"></span>{{ movie.original_language }}</h5>
-        <h6 v-if="movie.media_type != 'person'">Voto: {{ movie.vote_average }}</h6> -->
-        <!--         <span class="fi fi-gr"></span>
- -->
         <!-- ? Title -->
         <h3 v-if="movie.name != null">{{ movie.name }}</h3>
         <h3 v-else-if="movie.title != null">{{ movie.title }}</h3>
 
         <!-- ? Original title -->
-        <h4 v-if="movie.original_name != null">Original: {{ movie.original_name }}</h4>
-        <h4 v-else-if="movie.original_title != null">Original: {{ movie.original_title }}</h4>
-        <h5>Language: {{ movie.original_language }}</h5>
-        <h6>Voto: {{ movie.vote_average }}</h6>
+        <h4 v-if="movie.original_name != null">
+          Original: {{ movie.original_name }}
+        </h4>
+        <h4 v-else-if="movie.original_title != null">
+          Original: {{ movie.original_title }}
+        </h4>
+        
+        <!-- ? flag -->
+        <h5 class="">
+          <span class="fi" :class="getFlag(movie.original_language)"></span> ({{
+            movie.original_language
+          }})
+        </h5>
 
+        <h6>Voto: {{ movie.vote_average }}</h6>
       </div>
     </div>
   </div>
@@ -79,9 +75,14 @@ export default {
   cursor: pointer;
   perspective: 1000px;
   position: relative;
-  transition: transform .2s;
+  transition: transform 0.2s;
 
-  &:hover{
+  .myFlag {
+    height: 25px;
+    width: 25px;
+  }
+
+  &:hover {
     transform: scale(1.1);
     z-index: 1000;
   }
@@ -91,8 +92,6 @@ export default {
     height: 100%;
     object-fit: contain;
     overflow: hidden;
-
- 
   }
 
   .alternative {
@@ -130,11 +129,10 @@ export default {
 
   text-align: left;
 
-  h3{
+  h3 {
     font-weight: 600;
     font-size: 1rem;
     padding: 0.3rem 0.6rem;
-
   }
 
   h4,
@@ -143,8 +141,6 @@ export default {
     font-size: 0.85rem;
     padding: 0.3rem 0.6rem;
   }
-
-
 
   h5 {
     span {
