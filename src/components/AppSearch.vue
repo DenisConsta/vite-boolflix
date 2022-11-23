@@ -21,7 +21,7 @@ export default {
 
 <template>
   <div class="search d-none d-sm-block">
-    <input class="input toggle" type="text" placeholder="Titles, people, genres" v-model="store.titleSearch" @keyup.enter="$emit('startSearch')"/>
+    <input class="input toggle" type="text" :placeholder="store.currentCat" v-model="store.titleSearch" @keyup.enter="$emit('startSearch')"/>
     <img
       class="img"
       src="https://static.vecteezy.com/system/resources/previews/000/442/657/non_2x/vector-search-icon.jpg"

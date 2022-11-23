@@ -1,6 +1,7 @@
 <script>
 
 import { store } from '../data/store';
+import {getImageUrl, getFlag, getStars} from '../data/methods'
 
 export default {
   name: "AppCard",
@@ -11,29 +12,19 @@ export default {
   data() {
     return {
       store,
+      getImageUrl,
+      getFlag,
+      getStars,
 
     };
   },
   methods: {
-    getImageUrl(path) {
-      return "https://image.tmdb.org/t/p/w500" + path;
-    },
-    getFlag(country) {
-      if (country === "en" || country === "uk") return "fi-gb";
-      else if (country === "ko") return "fi-kr";
-      return "fi-" + country;
-    },
-    getStars(number) {
-      let n = 1, num = [];
-      if (number > 2) n = Math.floor(number / 2);
-      for(let i=0; i<n; i++) num.push('x');
-  
-      return num;
-    },
+    
     viewMovie(movie){
       store.infoViewer = !store.infoViewer;
       store.lastMovie = movie;
       console.log(store.lastMovie);
+
     }
   },
   computed: {},
@@ -52,9 +43,9 @@ export default {
         />
 
         <div v-else class="alternative">
-          <h3 v-if="movie.name != null">{{ movie.name }}</h3>
-          <h3 v-else-if="movie.title">{{ movie.title }}</h3>
+          <img src="../assets/poster-placeholder.webp" alt="">
         </div>
+
       </div>
       <div class="flip-card-back">
         <!-- ? Title -->
@@ -76,10 +67,10 @@ export default {
           }})
         </h5>
 
-        <!-- <h6>Voto: {{ movie.vote_average }}</h6> -->
         <div class="stars pb-4">
           <i v-for="(x, index) in getStars(movie.vote_average)" :key="index" class="fa-solid fa-star"></i>
         </div>
+
 
         <a @click="viewMovie(movie)" class="mx-1 my-btn">More info</a>
         
@@ -104,11 +95,6 @@ export default {
   .myFlag {
     height: 25px;
     width: 25px;
-  }
-
-  &:hover {
-    transform: scale(1.05);
-    z-index: 10;
   }
 
   img {

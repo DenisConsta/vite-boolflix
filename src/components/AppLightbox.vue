@@ -1,5 +1,6 @@
 <script>
 import { store } from "../data/store";
+import { getImageUrl, getFlag, getStars } from "../data/methods";
 
 export default {
   name: "AppLightbox",
@@ -10,34 +11,34 @@ export default {
   data() {
     return {
       store,
+      getImageUrl,
+      getFlag,
+      getStars,
     };
   },
   methods: {
-    getImageUrl(path) {
-      return "https://image.tmdb.org/t/p/w500" + path;
-    },
-    getImageUrl(path) {
-      return "https://image.tmdb.org/t/p/w500" + path;
-    },
-    getFlag(country) {
-      if (country === "en" || country === "uk") return "fi-gb";
-      else if (country === "ko") return "fi-kr";
-      return "fi-" + country;
-    },
-    getStars(number) {
-      let n = 1,
-        num = [];
-      if (number > 2) n = Math.floor(number / 2);
-      for (let i = 0; i < n; i++) num.push("x");
 
-      return num;
+  },
+  computed: {
+    getGenresString() {
+      let out = "";
+      this.movie.genre_ids.forEach((genre) => {
+        store.genresMovie.genres.filter(x => {
+          if(x.id === genre)
+            out += x.name+' ';
+        })
+      });
+      return out;
     },
   },
 };
 </script>
 
 <template>
-  <section @click.self="store.infoViewer = !store.infoViewer" class="d-flex justify-content-center align-items-center">
+  <section
+    @click.self="store.infoViewer = !store.infoViewer"
+    class="d-flex justify-content-center align-items-center"
+  >
     <div class="my-lightbox">
       <div class="container w-100 h-100">
         <div class="row h-100">
@@ -52,10 +53,8 @@ export default {
             />
 
             <div v-else class="alternative">
-              <h3 v-if="movie.name != null">{{ movie.name }}</h3>
-              <h3 v-else-if="movie.title">{{ movie.title }}</h3>
+              <img src="../assets/poster-placeholder.webp" alt="" />
             </div>
-
           </div>
           <div class="col textMovie">
             <i
@@ -102,6 +101,8 @@ export default {
                 ></i>
               </div>
 
+              <h4>Generi: <span class="lead">{{ getGenresString }}</span></h4>
+
               <p>
                 {{ movie.overview }}
               </p>
@@ -131,19 +132,21 @@ section {
   background-color: #2c2c2c;
 
   .row,
-  .col{
+  .col {
     max-height: 100%;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
     overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      overflow: hidden;
+    }
   }
 
   .textMovie {
     position: relative;
+    overflow: auto;
 
     .fa-xmark {
       position: absolute;
@@ -161,9 +164,7 @@ section {
     flex-direction: column;
     gap: 0.5rem;
 
-    p{
-      overflow: auto;
-      max-height: 350px;
+    p {
     }
   }
 

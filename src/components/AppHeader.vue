@@ -13,7 +13,7 @@ export default {
         <img src="../assets/logo-boolflix.png" alt="boolflix" />
       </div>
 
-      <div class="links d-none d-md-block">
+      <div class="links d-none d-lg-block">
         <ul>
           <li>
             <a href="#">Popular</a>
@@ -23,6 +23,9 @@ export default {
           </li>
           <li>
             <a href="#">TV Series</a>
+          </li>
+          <li>
+            <a href="#">Genres</a>
           </li>
         </ul>
       </div>
