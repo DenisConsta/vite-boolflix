@@ -2,9 +2,8 @@ import { store } from "./store";
 import axios from "axios";
 
 /* ? get direct */
-function getDirectApi(url) {
-  console.log('URL', url);
 
+function getDirectApi(url) {
   axios
     .get(url, {
       params: {
@@ -14,10 +13,8 @@ function getDirectApi(url) {
       }
     })
     .then((res) => {
-      console.log(res.data);
-      if (url === store.urlGenresMovie){
+      if (url === store.urlGenresMovie) {
         store.genresMovie = res.data;
-        adjustGenres();
       }
       else
         out = res.data;
@@ -26,7 +23,7 @@ function getDirectApi(url) {
       console.log(error);
     });
 }
-
+/* 
 function getSpecificApi(type) {
   if (type === null || type === '') {
     type = 'movie';
@@ -44,13 +41,9 @@ function checkGenres(url, res) {
     store.genresTv = res.data;
 
 }
+ */
 
 
-function adjustGenres(){
-  store.movie.forEach(element => {
-    element.genere = 'azione';
-  });
-}
 
 function getImageUrl(path) {
   return "https://image.tmdb.org/t/p/w500" + path;
@@ -59,6 +52,7 @@ function getImageUrl(path) {
 function getFlag(country) {
   if (country === "en" || country === "uk") return "fi-gb";
   else if (country === "ko") return "fi-kr";
+  else if (country === 'ja') return 'fi-jp';
   return "fi-" + country;
 }
 

@@ -33,7 +33,6 @@ export default {
         store.currentUrl = store.basic + type + "/popular?";
       } else store.currentUrl = store.basic + "search/" + type + "?";
 
-      console.log(store.currentUrl);
       store.genresMovie = getDirectApi(store.urlGenresMovie);
       
       if (type === "all") {
@@ -61,7 +60,6 @@ export default {
           console.log(error);
         });
 
-      console.log('XXXX', store[type]);
     },
   },
   /*   watch:{
@@ -98,6 +96,8 @@ export default {
       :type="store.tv"
       :titleSection="'TV Series'"
     />
+
+    <h5 class="text-center py-5" v-if="(store.movie.length == 0) && (store.tv.length == 0) ">Nessun risultato trovato</h5>
   </main>
 </template>
 

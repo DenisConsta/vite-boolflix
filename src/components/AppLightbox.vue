@@ -43,7 +43,7 @@ export default {
       <div class="container w-100 h-100">
         <div class="row h-100">
           <div
-            class="col-auto d-flex justify-content-center align-items-center"
+            class="col-auto justify-content-center align-items-center d-none d-xl-flex"
           >
             <img
               class=""
@@ -106,6 +106,7 @@ export default {
               <p>
                 {{ movie.overview }}
               </p>
+
             </div>
           </div>
         </div>
